@@ -44,6 +44,9 @@ Para ello se han seguido los siguientes pasos:
 - Creación de la BD en SQL teniendo en cuenta las restricciones semánticas y utilizando como base el esquema relacional.
 - Por último: introducción de los datos del `.csv` a SQL a través de Python.
 
+- [BD](BD/UFC_BD.sql) Este es el documento `.sql` con los constructores de cómo está creada la base de datos.
+
+
 # [Visualización](notebooks/Visualizaci%C3%B3n.ipynb)
 ---
 ![](images/grafico.jpg)
