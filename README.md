@@ -4,6 +4,7 @@
 
 Uno de los objetivos de este proyecto es saber cuáles son las habilidades de combates más efectivas en el ámbito profesional de las artes marciales mixtas. También poder hacer predicciones en base a esas habilidades con el conjunto de datos que se han extraido, limpiado e insertado en una BD. Esta idea surge por el afán de elaborar una teoría respaldada por datos que pruebe qué método de combate y qué habilidades son más efectivos para este deporte.
  Pero el principal objetivo de este proyecto es probar mis habilidades y los conociminetos adquiridos poniéndolos en práctica en un pequeño proyecto de análisis.
+Este trabajo esta abierto a modificarse con el fin de poder mejorar la fiabilidad de los datos y a la mejora de mis habilidades.
 
 
 
@@ -91,3 +92,4 @@ En este documento se encuentran las funciones necesarias para la conexión con l
 
 [from geopy.geocoders import Nominatim](https://geopy.readthedocs.io/en/stable/)
 
+[from skimage import io](https://scikit-image.org/docs/stable/api/skimage.io.html)

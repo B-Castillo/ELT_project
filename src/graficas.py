@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+from skimage import io
 
 import sqlalchemy as alch
 
@@ -292,4 +293,56 @@ def amg(base):
         
     
     return plt.show()
+
+def m_golpeo(peleadores, base):
+
+    q_1 = f"""
+    select sum(c_cabeza) as cabeza, sum(c_cuerpo) as cuerpo, sum(c_piernas) as piernas
+    from se_pelean
+    where w_l = "W" and peleador = "{peleadores[0]}";
+    """
+    df_1 = pd.read_sql(q_1, base)
+
+    q_2 = f"""
+    select sum(c_cabeza) as cabeza, sum(c_cuerpo) as cuerpo, sum(c_piernas) as piernas
+    from se_pelean
+    where w_l = "W" and peleador = "{peleadores[1]}";
+    """
+    df_2 = pd.read_sql(q_2, base)
+
+
+
+    imagen1 = io.imread("../images/cuerpo2.png")/255.0 # imread lee las imagenes con los pixeles codificados como enteros 
+    imagen2 = imagen1.copy()
+    # en el rango 0-255. Por eso la convertimos a flotante y en el rango 0-1
+    fig, ax = plt.subplots(1,2,figsize=(10,10))
+
+    total_1 = df_1["cabeza"]+df_1["cuerpo"]+df_1["piernas"]
+    imagen1[:1100,:,0]=1
+    imagen1[:1100,:,1]=1-df_1["cabeza"]/total_1
+    imagen1[:1100,:,2]=1-df_1["cabeza"]/total_1
+    imagen1[1100:4000,:,0]=1
+    imagen1[1100:4000,:,1]=1-df_1["cuerpo"]/total_1
+    imagen1[1100:4000,:,2]=1-df_1["cuerpo"]/total_1
+    imagen1[4000:,:,0]=1
+    imagen1[4000:,:,1]=1-df_1["piernas"]/total_1
+    imagen1[4000:,:,2]=1-df_1["piernas"]/total_1
+    ax[0].imshow(imagen1)
+    
+    total_2 = df_2["cabeza"]+df_2["cuerpo"]+df_2["piernas"]
+    imagen2[:1100,:,0]=1
+    imagen2[:1100,:,1]=1-df_2["cabeza"]/total_2
+    imagen2[:1100,:,2]=1-df_2["cabeza"]/total_2
+    imagen2[1100:4000,:,0]=1
+    imagen2[1100:4000,:,1]=1-df_2["cuerpo"]/total_2
+    imagen2[1100:4000,:,2]=1-df_2["cuerpo"]/total_2
+    imagen2[4000:,:,0]=1
+    imagen2[4000:,:,1]=1-df_2["piernas"]/total_2
+    imagen2[4000:,:,2]=1-df_2["piernas"]/total_2
+    ax[1].imshow(imagen2)
+
+    ax[0].set_title(f"{peleadores[0]}")
+    ax[1].set_title(f"{peleadores[1]}")
+
+    return plt.figure()
 
