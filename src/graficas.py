@@ -17,7 +17,7 @@ def inicio():
 
 
     # almacenamos el nombre de nuestra BBDD en una variable
-    db_name = input("¿A que base de datos se quiere conectar?: ")
+    db_name = input("¿A qué base de datos se quiere conectar?: ")
 
     # creamos la conexipn con MySQL
     conexion = f"mysql+pymysql://root:{password}@localhost/{db_name}"
@@ -80,7 +80,7 @@ def stats(peleadores, base):
 
 def por_conect(base): 
 
-    col = int(input(print("""¿Que estadistica quieres observar?\n 1. SIG. STR\n 2. TOTAL STR.\n 3. TD \n 4. CABEZA  \n 5. CUERPO \n 6. PIERNA \n 7. CLINCH \n 8. GROUND""")))
+    col = int(input(print("""¿Qué estadística quieres observar?\n 1. SIG. STR\n 2. TOTAL STR.\n 3. TD \n 4. CABEZA  \n 5. CUERPO \n 6. PIERNA \n 7. CLINCH \n 8. GROUND""")))
     
     estats = ["c_sig_str", "c_total_str", "c_td", "c_cabeza", "c_cuerpo", "c_piernas", "c_clinch", "c_ground","i_sig_str",
               "i_total_str", "i_td", "i_cabeza", "i_cuerpo", "i_piernas", "i_clinch", "i_ground"]
@@ -146,7 +146,7 @@ def por_conect(base):
     axes.set_ylabel('división', color = "blue", fontweight = "bold", fontsize = 12)
 
 
-    # para añadir un grid/rejilla a la gráfica
+    # para añadir un rejilla a la gráfica
     axes.grid(visible=True, color = "aliceblue")
 
 
@@ -224,44 +224,73 @@ def comparate(peleadores, base):
 
 def amg(base):
     
-    cat = int(input(print("""¿Qué categoria de peso quieres consultar?:
+    cat = int(input(print("""¿Qué categoría de peso quieres consultar?:
 1. Bantamweight \n2. Catch Weight \n3. Featherweight \n4. Flyweight \n5. Heavyweight
 6. Light Heavyweight \n7. Lightweight \n8. Middleweight \n9. Open Weight \n10. Super Heavyweight
 11. Welterweight \n12. Women's Bantamweight \n13. Women's Featherweight \n14. Women's Flyweight
 15. Women's Strawweight""")))
     
-    met = int(input(print("""¿Qué metodo de victoria quieres consultar?:\n 1. U-DEC\n 2. S-DEC\n 3. M-DEC\n 4. SUB\n 5. KO/TKO\n""")))
-    metodo = ["U-DEC", "S-DEC", "M-DEC", "SUB", "KO/TKO"]
+    met = int(input(print("""¿Qué método de victoria quieres consultar?:\n 1. U-DEC\n 2. S-DEC\n 3. SUB\n 4. KO/TKO\n""")))
+    metodo = ["U-DEC", "S-DEC", "SUB", "KO/TKO"]
     
-    q_1 = f"""
-    select division from division
-    order by division;
-    """
+    if met == 1 or 2:
 
-    df_1 = pd.read_sql(q_1, base)
-    
-    q_2 = f"""
-    select i_td , i_clinch, i_sub, i_sig_str, i_ground, (round*5+minuto) as tiempo
-    from combate
-    inner join se_pelean
-    on combate.combate = se_pelean.combate
-    natural join peleador
-    natural join pertenece
-    natural join division
-    where w_l = "W" and division = "{df_1["division"][cat-1]}" and metodo = "{metodo[met-1]}";
-    """
+        q_1 = f"""
+        select division from division
+        order by division;
+        """
 
-    df_2 = pd.read_sql(q_2, base)
+        df_1 = pd.read_sql(q_1, base)
+        
+        q_2 = f"""
+        select i_td , i_clinch, i_sub, i_sig_str, i_ground
+        from combate
+        inner join se_pelean
+        on combate.combate = se_pelean.combate
+        natural join peleador
+        natural join pertenece
+        natural join division
+        where w_l = "W" and division = "{df_1["division"][cat-1]}" and metodo = "{metodo[met-1]}";
+        """
+
+        df_2 = pd.read_sql(q_2, base)
+
+        filas = 5
+    elif met == 3 or 4:
+
+        q_1 = f"""
+        select division from division
+        order by division;
+        """
+
+        df_1 = pd.read_sql(q_1, base)
+        
+        q_2 = f"""
+        select i_td , i_clinch, i_sub, i_sig_str, i_ground, (round*5+minuto) as tiempo
+        from combate
+        inner join se_pelean
+        on combate.combate = se_pelean.combate
+        natural join peleador
+        natural join pertenece
+        natural join division
+        where w_l = "W" and division = "{df_1["division"][cat-1]}" and metodo = "{metodo[met-1]}";
+        """
+
+        df_2 = pd.read_sql(q_2, base)
+
+        filas = 6
+    else:
+        return "No se ha podido hacre la figura"
 
     #------------------------------------------------------Gráfica----------------------------------------------------------
 
 
-    fig, ax = plt.subplots(6, 1, figsize=(15,20))
+    fig, ax = plt.subplots(filas, 1, figsize=(15,22))
 
     for i in range(len(df_2.columns)):
         
         sns.boxplot(x=df_2.columns[i], data=df_2, ax=ax[i])
         
-        
+    
     return plt.show()
 
