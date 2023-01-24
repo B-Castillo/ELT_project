@@ -1,5 +1,5 @@
 
-# UFC-influancia de habilidades en combate
+# UFC-Influencia de habilidades en combate
 
 
 Uno de los objetivos de este proyecto es saber cuáles son las habilidades de combates más efectivas en el ámbito profesional de las artes marciales mixtas. También poder hacer predicciones en base a esas habilidades con el conjunto de datos que se han extraido, limpiado e insertado en una BD. Esta idea surge por el afán de elaborar una teoría respaldada por datos que pruebe qué método de combate y qué habilidades son más efectivos para este deporte.
